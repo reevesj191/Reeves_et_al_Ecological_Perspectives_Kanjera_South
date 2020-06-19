@@ -3,29 +3,29 @@ title: Ecological perspectives on technological diversity at Kanjera South
 author:
   - name: Jonathan S. Reeves
     email: jonathan.reeves@uni-tuebingen.de
-    affiliation: Eberhard Karls University of Tübingen
+    affiliation: Department of Prehistory and Quarternary Ecology, Eberhard Karls University of Tübingen
     footnote: 1
   - name: David R. Braun
     email: David_Braun@gwu.edu
-    affiliation: The George Washington University
+    affiliation: Center for the Advanced Study of Human Paleobiology, The George Washington University
     footnote: 2
-  - name: Emma Finestone
-    email: cat@example.com
-    affiliation: Max Planck Institute for the Science of Human History
+  - name: Emma M. Finestone
+    email: finestone@shh.mpg.de
+    affiliation: Department of Archaeology, Max Planck Institute for the Science of Human History
     footnote: 3
   - name: Thomas Plummer
     email: derek@example.com
     affiliation: The Graduate Center, City University of New York
     footnote: 4
 address:
-  - code: Eberhard Karls University of Tübingen
-    address: Eberhard Karls University of Tübingen
-  - code: The George Washington University
-    address: The George Washington University
-  - code: Max Planck Institute for the Science of Human History
-    address: Max Planck Institute for the Science of Human History
-  - code: The Graduate Center, City University of New York
-    address: The Graduate Center, City University of New York
+  - code: Department of Prehistory and Quarternary Ecology
+    address: Eberhard Karls University of Tübingen, Schloss Hohentübingen Burgsteige 11, 72070 Tübingen, Germany
+  - code: Center for the Advanced Study of Human Paleobiology
+    address: George Washington University, 800 22nd Street, North West, Washington D.C., USA.
+  - code: Department of Archaeology
+    address: Max Planck Institute for the Science of Human History, Kahlaische Strasse 10, D-07743, Jena, Germany
+  - code: Department of Anthropology, Queens College
+    address: CUNY & NYCEP, 65-30 Kissena Blvd, Flushing, NY 11367, USA
 footnote:
   - code: 1
     text: "Corresponding Author"
@@ -38,13 +38,21 @@ date: "`r Sys.Date()`"
 bibliography: Kanjera_lithics_JHE.bib
 #linenumbers: true
 #numbersections: true
-header-includes: \usepackage{setspace}\doublespacing
+header-includes: 
+
+- \usepackage{setspace}\doublespacing
+- \usepackage{lineno}
+
 output: 
    pdf_document: rticles::elsevier_article
    word_document: 
       reference_docx: Manuscript_Template.docx
 
 ---
+
+\doublespacing
+\pagebreak
+\linenumbers
 
 ```{r step up, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
@@ -504,6 +512,8 @@ Despite the superficial simplicity of the Oldowan, its variability reflects a co
 
    This pattern also appears to have an influence on the technological strategies employed by Oldowan tool makers at Kanjera South. The relationship between core reduction strategies and reduction intensity indicates that raw material quality and provenance have a strong influence on the technological variation observed within a lithic assemblage. While these results show that ecological parameters have a strong effect on stone tool variation, a substantial amount of variation remains unexplained by ecology alone. Overall, these results suggest that future studies must utilize a more integrated approach to understand the behavioral significance of the Oldowan.
 
+# Acknowledgements
 
+The authors thank Claudio Tennie for reading an earlier version of the paper. Reeves also thanks the STONECULT Project for supporting his research. The project STONECULT has received funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No. 714658).
 
 # References
