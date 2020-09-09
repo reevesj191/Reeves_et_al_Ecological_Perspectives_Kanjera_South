@@ -27,27 +27,23 @@ address:
   - code: Department of Anthropology, Queens College
     address: CUNY & NYCEP, 65-30 Kissena Blvd, Flushing, NY 11367, USA
 footnote:
+    
   - code: 5
     text: "Corresponding Author"
-    
 abstract: |
   The aspects of hominin behavior responsible for Oldowan stone tool variation has been the focus of much debate. There is some consensus that Oldowan artifact variation arises from a combination of ecological and cultural factors. These factors are often examined independently of one another. The diversity of raw material types and technological strategies present at the site of Kanjera South provide an opportunity to examine the interacting effect of ecology and culture on Oldowan stone tool variation. Here we combine previous analyses of raw material properties, provenance, and technology with quantitative measures of core reduction intensity and tool utilization to examine the influence of both ecological and techno-cultural factors on stone tool variation at Kanjera South. The results of this analysis show that technological variation at a Kanjera South reflects a dynamic relationship between raw material properties, provenance, and hominin mobility. Cores produced on raw materials from distant sources are more reduced than locally sourced raw materials. Distant raw materials are generally more resistant to edge attrition compared to those available locally which may have incentivized their transport over long distances. Moreover, the variation in stone tool reduction is not constistent with neutral models of stone tool transport and discard. This suggests that the lithic assemblage at Kanjera South may reflect a structured land-use strategy that may relate to the resource rich nature of the Homa Penninsula. This pattern of stone tool utilization also has an impact on the technological strategies employed by Oldowan tool makers at Kanjera South. Cores produced on raw materials from distant sources also exhibit more complex core reduction strategies than locally acquired materials. While this pattern is partially due to the differences the quality of knappable stone, bifacial centripetal and multifacial core reduction strategies also arise due to the continuous transport and use of exotic raw materials. These results demonstrate that ecological factors such as raw material provenance and physical properties have strong impacts on reduction intensity and the technological strategies utilized by hominins. Yet, not all stone tool variation at Kanjera South can be explained by this relationship. These results suggest that Oldowan stone tool variation should not be examined from a strictly ecological or technological perspective, but rather within the context of its broader cultural-ecological system.
-
 journal: "Journal of Human Evolution"
 date: "`r Sys.Date()`"
 bibliography: Kanjera_lithics_JHE.bib
 #linenumbers: true
 #numbersections: true
 header-includes: 
-
 - \usepackage{setspace}\doublespacing
 - \usepackage{lineno}
-
 output: 
-   pdf_document: rticles::elsevier_article
    word_document: 
       reference_docx: Manuscript_Template.docx
-
+   pdf_document: rticles::elsevier_article
 ---
 
 \doublespacing
