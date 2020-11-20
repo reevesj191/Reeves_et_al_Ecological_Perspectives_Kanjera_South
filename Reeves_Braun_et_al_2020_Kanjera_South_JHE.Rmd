@@ -128,6 +128,7 @@ hs <- data.frame(rasterToPoints(hs))
 water <- read_sf("Figures/Figure_data/ke_major-rivers.shp")
 kjs <- read_sf("Figures/Figure_data/KJS_WSG_84.shp")
 rivers2<-read_sf("Figures/Figure_data/Rivers_homa_WGS2.shp")
+Samanga<-read_sf("Figures/Figure_data/SamangaFault_WGS.shp")
 st_geometry(kjs) <- NULL
 
 ggplot()+
@@ -137,10 +138,11 @@ ggplot()+
    
    new_scale_fill()+
    
-  geom_raster(data = dem[dem$Homa_Penninsula_DEM_30m2 > 1134 & dem$Homa_Penninsula_DEM_30m2 < 2000,],
-            aes(x=x,y=y,fill = Homa_Penninsula_DEM_30m2),alpha = .4, inherit.aes = FALSE)+
+ geom_raster(data = dem[dem$Homa_Penninsula_DEM_30m2 > 1134 & dem$Homa_Penninsula_DEM_30m2 < 2000,],
+           aes(x=x,y=y,fill = Homa_Penninsula_DEM_30m2),alpha = .4, inherit.aes = FALSE)+
   # geom_sf(data = water, color = "dodger blue1")+
    geom_sf(data = rivers2, color = "dodger blue2")+
+    geom_sf(data = Samanga, color = "red", size=3)+
       
    scale_fill_gradientn(colours = terrain.colors(100), "Elevation (m)")+
   
