@@ -264,13 +264,48 @@ cores$rm.provenance <- "Distant"
 cores$rm.provenance[cores$RM %in% c("HLI", "FNY", "HPH")] <- "Local"
 cores <- cores[cores$RM != "NYC",]
 flakes <- read.csv("Data/ksj_flakes_with_GLMM_Seq.csv")
+colnames(cores)
+```
+
+```{r core table}
+
+cores_table <- cores %>% dplyr::group_by(RM) %>%
+   dplyr::summarise("N" = dplyr::n(),
+                    "Avg. Length" = round(mean(Axis1),2),
+                    "Avg. Width" = round(mean(Axis2),2),
+                    "Avg. Thickness" = round(mean(Axis3),2),
+                    "Avg. Mass (g)" = round(mean(Mass),3),
+                    "Avg. number of flake scars" = round(mean(FlakScars, na.rm = TRUE)), 
+                    "Avg. Exploitation Surfaces" = round(mean(ExploitationSurfaces, na.rm = TRUE)),
+                    "Avg. Surfarce Interactions" = round(mean(Interactions, na.rm = TRUE)),
+                    "Avg. Percent Mass Lost" = round(mean(fixedpredict * 100))
+)
+
+
+flakes_table <- flakes %>% dplyr::group_by(Raw.Material) %>%
+   dplyr::summarise("N" = dplyr::n(),
+                    "Avg. Length" = round(mean(Length),2),
+                    "Avg. Width" = round(mean(Length),2),
+                    "Avg. Mass (g)" = round(mean(Mass),3),
+                    "Avg. number of platform facets" = round(mean(Platform.facets)),
+                    "Avg. number of dorsal scars" = round(mean(N.Flake.Scars, na.rm = TRUE)), 
+                    "Avg. number of dorsal directions" = round(mean(Flake.scar.direction, na.rm = TRUE)),
+                    "Avg. average percent cortex" = round(mean(Percent.Cortex*100, na.rm = TRUE))
+)
+
+
+flakes_table
+
+shapiro.test(flakes$pred.sequence)
+
+qqnorm()
 ```
 
 ```{r Kruskal Wallace cores,echo = FALSE, include=FALSE}
 
 library("FSA")
 
-kw.res <- kruskal.test(cores$fixedpredict, g = cores$RM)
+kw.res <- Man(cores$fixedpredict, g = cores$RM)
 core.kw.p <- kw.res$p.value 
 dT.res <- dunnTest(cores$fixedpredict~ cores$RM)
 ```
