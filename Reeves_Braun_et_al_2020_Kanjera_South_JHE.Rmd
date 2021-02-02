@@ -217,29 +217,17 @@ kable(rm,align = "c",caption = "A list of rock types included in this analysis")
 
 ```{r include=FALSE}
 
-cores$redux.strat <- "NA"
-cores$redux.strat[cores$DeLaTorre.Typology == "Bidirectional Abrupt"] <- "Unifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Multifacial irregular"] <- "Multifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Multifacial irregularl "] <- "Multifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Unidirectional abrupt unipolar"] <- "Unifacial"
-cores$redux.strat[cores$DeLaTorre.Typology ==  "Polyhedral "] <- "Multifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Unifacial centripetal exploitation "] <-  "Unifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Bifacial Partial Exploitation "] <-  "Bifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Unidirectional Abrupt bipolar "] <-  "Unifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "Unifacial simple partial exploitation "] <-  "Unifacial"
-cores$redux.strat[cores$DeLaTorre.Typology == "bifacial centripetal"] <-  "Bifacial"
-
 
 cores$DeLaTorre.Typology <- factor(as.character(cores$DeLaTorre.Typology), 
-                                   levels = c("Unifacial simple partial exploitation ",
-                                              "Unidirectional abrupt unipolar", 
-                                              "Unidirectional Abrupt bipolar ",
-                                              "Bidirectional Abrupt",
-                                              "Bifacial Partial Exploitation ",
-                                              "Unifacial centripetal exploitation ",
+                                   levels = c("unifacial simple partial",
+                                              "unidirectional abrupt unipolar", 
+                                              "unidirectional abrupt bipolar ",
+                                              "bidirectional abrupt",
+                                              "bifacial partial",
+                                              "unifacial centripetal",
                                               "bifacial centripetal",
-                                              "Polyhedral ",
-                                              "Multifacial irregularl "))
+                                              "polyhedral ",
+                                              "multifacial irregular"))
 ```
 
 ## Characterizing Stone Tool Utilization.
@@ -292,26 +280,22 @@ flakes_table <- flakes %>% dplyr::group_by(Raw.Material) %>%
                     "Avg. number of dorsal directions" = round(mean(Flake.scar.direction, na.rm = TRUE)),
                     "Avg. average percent cortex" = round(mean(Percent.Cortex*100, na.rm = TRUE))
 )
-
-
-flakes_table
-
-shapiro.test(flakes$pred.sequence)
-
-qqnorm()
 ```
 
 ```{r Kruskal Wallace cores,echo = FALSE, include=FALSE}
 
-library("FSA")
-
 kw.res <- Man(cores$fixedpredict, g = cores$RM)
 core.kw.p <- kw.res$p.value 
 dT.res <- dunnTest(cores$fixedpredict~ cores$RM)
+
+
+wilcox.test(cores$fixedpredict~cores$rm.provenance)
+
 ```
 
 ```{r echo = FALSE, include = FALSE}
 cores.table <- table(cores$rm.provenance,cores$DeLaTorre.Typology)
+
 res <- fisher.test(cores.table, simulate.p.value = TRUE)
 
 cores$redux.strat <- factor(x = cores$redux.strat, levels = c("Unifacial", "Bifacial", "Multifacial"))
@@ -387,6 +371,8 @@ flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
 fs.res <- kruskal.test(flakes$flake.stage,flakes$Raw.Material)
 fs.dunn.res <- dunnTest(flakes$flake.stage,flakes$Raw.Material)
 
+wilcox.test(flakes$flake.stage~
+             flakes$rm.provenance)
 
 a <- ggplot(flakes, aes(x = Raw.Material, y = flake.stage, fill = rm.provenance)) + 
    geom_boxplot()+
