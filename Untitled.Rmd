@@ -20,52 +20,64 @@ library(dunn.test)
 library(raster)
 library(ggplot2)
 library(ggsn)
-library(ggsflabel)
 library(ggrepel)
 library(sf)
 library(ggnewscale)
+library(knitr)
+
 ```
 
 
 ```{r cores prep}
-cores <- read.csv("Data/CORES_2019_JHE_With_REDUX.csv")
+cores <- read.csv("Data/kjs_cores.csv")
+cores$DeLaTorre.Typology[cores$DeLaTorre.Typology == "multifacial irregular "] <- "multifacial irregular"
+cores$DeLaTorre.Typology[cores$DeLaTorre.Typology == "unidirectional abrupt bipolar " ] <- "unidirectional abrupt bipolar"
 cores$RM <- toupper(cores$RM)
 
-levels(cores$DeLaTorre.Typology)
-### Reorder factor levels
-# cores$DeLaTorre.Typology <- factor(as.character(cores$DeLaTorre.Typology), 
-#                                    levels = c("unifacial simple partial",
-#                                               "unidirectional abrupt unipolar", 
-#                                               "unidirectional abrupt bipolar",
-#                                               "bidirectional abrupt",
-#                                               "bifacial partial",
-#                                               "unifacial centripetal",
-#                                               "bifacial centripetal",
-#                                               "polyhedral",
-#                                               "multifacial irregular"))
+cores$DeLaTorre.Typology <- factor(cores$DeLaTorre.Typology, 
+                                   levels = c("unifacial simple partial",
+                                              "unidirectional abrupt unipolar",
+                                              "unidirectional abrupt bipolar",
+                                              "bidirectional abrupt",
+                                              "bifacial partial",
+                                              "unifacial centripetal",
+                                              "bifacial centripetal",
+                                              "polyhedral",
+                                              "multifacial irregular"))
+                                              
+                                              
+                                              
+   
+
+## Reorder factor levels
+
 
 cores$rm.provenance <- "Distant"
 cores$rm.provenance[cores$RM %in% c("HLI", "FNY", "HPH")] <- "Local"
 cores$RM <- factor(cores$RM, levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
 
-cores_table <- cores %>% dplyr::group_by(RM) %>%
+cores_table <- cores %>% 
+   group_by(RM) %>%
    dplyr::summarise("N" = dplyr::n(),
-                    "Avg. Length" = round(mean(Axis1),2),
-                    "Avg. Width" = round(mean(Axis2),2),
-                    "Avg. Thickness" = round(mean(Axis3),2),
-                    "Avg. Mass (g)" = round(mean(Mass),3),
-                    "Avg. number of flake scars" = round(mean(FlakScars, na.rm = TRUE)), 
-                    "Avg. Exploitation Surfaces" = round(mean(ExploitationSurfaces, na.rm = TRUE)),
-                    "Avg. Surfarce Interactions" = round(mean(Interactions, na.rm = TRUE)),
-                    "Avg. Percent Mass Lost" = round(mean(fixedpredict * 100))
-)
+              "Avg. Length" = round(mean(Axis1),2),
+              "Avg. Width" = round(mean(Axis2),2),
+              "Avg. Thickness" = round(mean(Axis3),2),
+              "Avg. Mass (g)" = round(mean(Mass),3),
+              "Avg. number of flake scars" = round(mean(FlakScars, na.rm = TRUE)), 
+              "Avg. Exploitation Surfaces" = round(mean(ExploitationSurfaces, na.rm = TRUE)),
+              "Avg. Surfarce Interactions" = round(mean(Interactions, na.rm = TRUE)),
+              "Avg. Percent Mass Lost" = round(mean(fixedpredict * 100)))
 
-kable(cores_table,caption = "Table 2")
+kable(cores_table,caption = "Table 2: A Summary of the cores included in the analysis by raw material")
+
 ```
 
 ```{r flake prep}
 
-flakes <- read.csv("Data/kjs_flakes.csv")
+flakes$ <- read.csv("Data/kjs_flakes.csv")
+flakes$Raw.Material <- factor(toupper(flakes$Raw.Material), levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
+flakes$rm.provenance <- "Distant"
+flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
 
 flakes_table <- flakes %>% dplyr::group_by(Raw.Material) %>%
    dplyr::summarise("N" = dplyr::n(),
@@ -79,7 +91,7 @@ flakes_table <- flakes %>% dplyr::group_by(Raw.Material) %>%
                     "Avg. Flake Sequence" = round(mean(flake.seq))
 )
 
-kable(flakes_table, caption = "Table 3")
+kable(flakes_table, caption = "Table 3: A Summary of flakes included in the Study by raw material")
 ```
 
 
@@ -108,39 +120,29 @@ st_geometry(kjs) <- NULL
 
 ggplot()+
    geom_raster(data = hs,aes(x=x, y=y, fill = layer),show.legend = FALSE)+
-   
    scale_fill_gradientn(colours = grey.colors(100,start = .5, end = 0))+
-   
    new_scale_fill()+
    
    geom_raster(data = dem[dem$Homa_Penninsula_DEM_30m2 > 1134 & dem$Homa_Penninsula_DEM_30m2 < 2000,],
                aes(x=x,y=y,fill = Homa_Penninsula_DEM_30m2),alpha = .4, inherit.aes = FALSE)+
-  
-  #geom_sf(data = water, color = "dodger blue1")+
-  
-  geom_sf(data = rivers2, color = "dodger blue2")+
-  
+ 
+  geom_sf(data = rivers2, color = "dodger blue2", alpha = .5)+
   geom_sf(data = fault,linetype =2) +
   geom_sf_text(data = fault, aes(label = "Samanga Fault"), angle = 47, nudge_y = -.015)+ 
-      
    scale_fill_gradientn(colours = terrain.colors(100), "Elevation (m)")+
-  
-    geom_point(data = kjs, aes(x= X, y = Y)) +
-   
-   geom_label_repel(data= kjs, aes(x = X, y = Y,label = Local),
+  geom_point(data = kjs, aes(x= X, y = Y)) +
+  geom_label_repel(data= kjs, aes(x = X, y = Y,label = Local),
                   box.padding   = 1, 
                   point.padding = .5,
                   segment.color = 'black',
                   color = "black")+
    
    north(location = "bottomleft", symbol = 10, x.min = 34.43,x.max = 34.9, y.min = -0.525, y.max = -.27195)+
-   
-   scalebar(location = "bottomleft",dist_unit = "km",dist = 4, x.min = 34.44,x.max = 34.9, y.min = -0.528, y.max = -.275, transform = TRUE,st.dist = .025) + 
+   scalebar(location = "bottomleft",dist_unit = "km",dist = 4, x.min = 34.44,x.max = 34.9, y.min = -0.528, y.max = -.275, 
+            transform = TRUE,st.dist = .025) + 
    
    scale_x_continuous(limits = c(34.42,34.8), expand = c(0,0))+
-   
    scale_y_continuous(limits = c(-0.55,-.275), expand = c(0,0))+
-   
    theme(panel.background = element_rect(fill = "dodger blue1"),
          panel.grid = element_blank(),
          panel.spacing = unit(1, "cm"),
@@ -153,6 +155,7 @@ ggplot()+
 
 
 ```{r fig-2, echo=FALSE, warning=FALSE, , fig.cap="Examples of the found at Kanjera South. (A) Core produced on Homa limestone. (B) Core produced on Oyugis granite. (C) Core produced on Bukoban quartzite. (D) Core produced on Fenetized nyanzian.  \\label{tools}", paged.print=FALSE}
+
 library(png)
 library(grid)
 
@@ -187,19 +190,6 @@ grid.arrange(a,b, ncol = 2)
 
 ```
 
-```{r fig-4, fig.height=3, fig.width=5, warning=FALSE, echo=FALSE, fig.cap= "The distribution of flake sequence values present within the Kanjera South flake assemblage. The primary differences in flake sequence values are between materials originating from more distant sources than those that originate from local sources of stone. \\label{flake_seq_rm}"}
-### Doing Sequence the old way since there are currently problems with the GLMM ###
-
-  ggplot(flakes, aes(x = Raw.Material, y = flake.stage, fill = rm.provenance)) + 
-   geom_boxplot()+
-   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
-   labs(x = "Raw Material", y = "Flake Sequence")+
-   guides(fill=guide_legend(title="Raw Material Provenance")) +
-   theme(panel.background = element_rect(color = "black", fill = "white"),
-         legend.position = "right")
-```
-# Statistical Tests
-
 ## The significance of cores reduction intensity by raw material Provenance
 
 ```{r}
@@ -207,10 +197,94 @@ wilcox.test(cores$fixedpredict~cores$rm.provenance)
 ```
 
 
+
+```{r fig-4, fig.height=3, fig.width=5, warning=FALSE, echo=FALSE, fig.cap= "The distribution of flake sequence values present within the Kanjera South flake assemblage. The primary differences in flake sequence values are between materials originating from more distant sources than those that originate from local sources of stone. \\label{flake_seq_rm}"}
+
+  ggplot(flakes, aes(x = Raw.Material, y = flake.seq, fill = rm.provenance)) + 
+   geom_boxplot()+
+   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+   labs(x = "Raw Material", y = "Flake Sequence")+
+   guides(fill=guide_legend(title="Raw Material Provenance")) +
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "right")
+```
+
+## The significance of flake sequence according to raw material Provenance 
+```{r}
+wilcox.test(flakes$flake.seq~
+             flakes$rm.provenance)
+```
+```{r fig-5, echo=FALSE,dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= "Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. \\label{flake_efficiency}"}
+
+allflakes<-read.csv("Data/PerMass_AllFlakes.csv")
+
+allflakes$RM <- factor(allflakes$RM, levels = c("BFe", "NYr", "BBA","BQu","HLi","FNy"), ordered = TRUE)
+
+flakes$rm.provenance <- "Distant"
+flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
+
+allflakes$rm.provenance<-"Distant"
+allflakes$rm.provenance[allflakes$RM %in% c("HLi","FNy")]<-"Local"
+
+Plot1<-ggplot(data=allflakes, aes(x=RM, y=PerMass, fill=rm.provenance))+
+  geom_jitter()+
+  scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+  theme_classic()
+
+Plot2<-Plot1+
+  geom_violin()+
+  ylab("Edge to Mass Ratio mm/log(grams)")+
+  labs(fill = "Raw Material Provenance")+
+  xlab("Raw Materials")
+
+
+Plot2
+
+
+```
+
+```{r fig-6,echo = FALSE, fig.width=6.5, fig.height= 4, fig.cap= "Left: The distribution of core reduction strategies by raw material type. With the exception of Homa Limestone, raw materials that derive from the Kisi highlights more greatly represented by complex core reduction strategies than those that can be found in the immediate vicinity of Kanjera South. Right: The distribution of reduction intensity values according to reduction strategy.  **USP**: Unifacial Simple Partial. **UAU**: Unidirectional abrupt unifacial. **UABI**: Unifacial abrupt bidirectional. **BA**: Bidirectional Abrupt. **BAP** Bifacial Partial. **UC**: Unifacial centripetal. **BC**: Bifacial Centripetal. **Poly**: Polyhedral. **MFI**: Mutifacial Irregular. The colors of the boxplots correspond with the representation of different reduction strategies in the left figure. \\label{core.tech}"}
+
+
+cc <- scales::seq_gradient_pal("black", "light grey", "lab")(seq(0,1,length.out=9))
+
+redux.tech<-ggplot(cores, aes(x = DeLaTorre.Typology, y = fixedpredict, fill = DeLaTorre.Typology)) +
+   geom_boxplot() +
+   scale_fill_manual(values=cc) +
+      labs(x = "Core Reduction Strategy", y = "Reduction intensity (% Mass Lost)")+
+      guides(fill=guide_legend(title="Provenance")) +
+   scale_x_discrete(labels= c("USP", "UAU", "UABI", "BA", "BAP", "UC", "BC","Poly", "MFI"))+
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "none",
+         axis.text.x = element_text(vjust = 1, hjust = 1, angle = 70))
+   
+
+rm.tech <- ggplot(cores, aes(x =RM , fill = DeLaTorre.Typology)) +
+   geom_bar(position = "fill") +
+   scale_fill_manual(values=cc)+
+   labs(x = "Raw Material", y = "Relative Frequency") + 
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "none")
+
+grid.arrange(rm.tech, redux.tech,ncol=2)
+
+
+redux.strat.table <- table(cores$RM,cores$DeLaTorre.Typology)
+
+```
+
+## Significance of core reduction intensity versus core reduction strategies
+```{r}
+kruskal.res <- kruskal.test(cores$fixedpredict, cores$DeLaTorre.Typology)
+kruskal.res
+```
+
 ## The significance of core reduction strategies according to raw material Provenance
 ```{r}
+
 cores.table <- table(cores$rm.provenance,cores$DeLaTorre.Typology)
 kable(cores.table)
+
 ```
 
 ### Fishers Exact Test
@@ -220,8 +294,14 @@ res <- fisher.test(cores.table, simulate.p.value = TRUE)
 res
 ```
 
-## The significance of flake sequence according to raw material Provenance 
+## Delete
+
 ```{r}
-wilcox.test(flakes$flake.stage~
-             flakes$rm.provenance)
+
+flakes <- left_join(flakes, allflakes[,c("Accession", "PerMass")], by = c("ID" = "Accession"))
+
+ggplot(flakes, aes(x = flake.seq, y = PerMass)) + geom_point()
+
+summary(lm(flakes$PerMass~flakes$flake.seq + flakes$Raw.Material))
+
 ```

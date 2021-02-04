@@ -425,7 +425,7 @@ Analysis of the relative proportion of edge to mass in flakes indicates signific
 
 ```{r fig-7, echo=FALSE,dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= "Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. \\label{flake_efficiency}"}
 
-allflakes<-read.csv("~/Dropbox/JR_DRB/Kanjera_JHE/Kanjera_South/Kanjera_Lithics/PerMass_AllFlakes")
+allflakes<-read.csv("Data/PerMass_AllFlakes.csv")
 
 allflakes$RM <- factor(allflakes$RM, levels = c("BFe", "NYr", "BBA","BQu","HLi","FNy"), ordered = TRUE)
 
