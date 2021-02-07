@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE)
 
+
 tiff_figures = TRUE
 
 library(ggplot2)
@@ -74,7 +75,7 @@ kable(cores_table,caption = "Table 2: A Summary of the cores included in the ana
 
 ```{r flake prep}
 
-flakes$ <- read.csv("Data/kjs_flakes.csv")
+flakes <- read.csv("Data/kjs_flakes.csv")
 flakes$Raw.Material <- factor(toupper(flakes$Raw.Material), levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
 flakes$rm.provenance <- "Distant"
 flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
@@ -214,11 +215,12 @@ wilcox.test(cores$fixedpredict~cores$rm.provenance)
 wilcox.test(flakes$flake.seq~
              flakes$rm.provenance)
 ```
-```{r fig-5, echo=FALSE,dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= "Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. \\label{flake_efficiency}"}
+```{r fig-5, echo=FALSE,dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= Left: "Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. Right: A scatter plot examining the relationship between flake efficiency and flake sequence. \\label{flake_efficiency}"}
 
 allflakes<-read.csv("Data/PerMass_AllFlakes.csv")
-
 allflakes$RM <- factor(allflakes$RM, levels = c("BFe", "NYr", "BBA","BQu","HLi","FNy"), ordered = TRUE)
+
+flakes <- left_join(flakes,allflakes[,c("Accession", "PerMass")], by = c("ID" = "Accession"))
 
 flakes$rm.provenance <- "Distant"
 flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
@@ -229,7 +231,9 @@ allflakes$rm.provenance[allflakes$RM %in% c("HLi","FNy")]<-"Local"
 Plot1<-ggplot(data=allflakes, aes(x=RM, y=PerMass, fill=rm.provenance))+
   geom_jitter()+
   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
-  theme_classic()
+  theme_classic()+
+   theme(legend.position = "top")
+
 
 Plot2<-Plot1+
   geom_violin()+
@@ -237,8 +241,16 @@ Plot2<-Plot1+
   labs(fill = "Raw Material Provenance")+
   xlab("Raw Materials")
 
+Plot3 <- ggplot(flakes, aes(x = flake.seq, y = PerMass, color = rm.provenance))+
+   geom_point()+
+   scale_color_manual(values = c("#E69F00", "#56B4E9"))+
+   ylab("Edge to Mass Ratio mm/log(grams)")+
+   xlab("Flake Sequence")+
+   theme_classic()+
+   theme(legend.position = "none")
 
-Plot2
+
+grid.arrange(Plot2, Plot3, ncol =2)
 
 
 ```
@@ -299,6 +311,8 @@ res
 ```{r}
 
 flakes <- left_join(flakes, allflakes[,c("Accession", "PerMass")], by = c("ID" = "Accession"))
+
+
 
 ggplot(flakes, aes(x = flake.seq, y = PerMass)) + geom_point()
 
