@@ -271,7 +271,7 @@ res
 
 ```
 
-```{r fig-6, echo=FALSE,dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= " Left: Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. Right: A scatter plot examining the relationship between flake efficiency and flake sequence. \\label{flake_efficiency}"}
+```{r fig-6, echo=FALSE,dpi= 1000,fig.height= 4, fig.width= 6, fig.cap= " Left: Boxplots of the measures of flake efficiency. Y-axis represents perimeter of flakes divided by a logarithmically transformed mass value. Right: A scatter plot examining the relationship between flake efficiency and flake sequence. \\label{flake_efficiency}"}
 
 
 allflakes<-read.csv("Old/Data/PerMass_AllFlakes.csv")
@@ -282,8 +282,8 @@ allflakes$RM <- factor(allflakes$RM, levels = c("BFe", "NYr", "BBA","BQu","HLi",
 a <-ggplot(data=flakes[flakes$Raw.Material!="OGR",], aes(x=Raw.Material, y= PerMass, fill=rm.provenance))+
   geom_jitter()+
   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
-  theme_classic()+
-   theme(legend.position = "top") +
+   theme(legend.position = "top",
+         panel.background = element_rect(color = "black", fill = "white")) +
    geom_violin()+
   ylab("Edge to Mass Ratio mm/log(grams)")+
   labs(fill = "Raw Material Provenance")+
@@ -295,9 +295,9 @@ b <- ggplot(flakes, aes(x = flake.seq, y = PerMass, color = rm.provenance))+
    scale_color_manual(values = c("#E69F00", "#56B4E9"))+
    ylab("Edge to Mass Ratio mm/log(grams)")+
    xlab("Flake Sequence")+
-   labs(color = "Provenance")+
-   theme_classic() + 
-   theme(legend.position = "top",
+   labs(color = "Provenance") + 
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "top",
          axis.title.y = element_text(color = "white"),
          axis.text.y = element_text(color = "white"))
 
