@@ -1,4 +1,3 @@
 # Reeves_et_al_2020_Kanjera_South
-Kanjera South Core Transport and behavior paper 
+This is the repository of data and code that accompanies... 
 
-Test
