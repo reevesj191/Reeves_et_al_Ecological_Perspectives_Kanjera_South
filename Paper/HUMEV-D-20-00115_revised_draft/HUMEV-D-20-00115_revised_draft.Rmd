@@ -29,7 +29,7 @@ library(sf)
 library(ggnewscale)
 library(knitr)
 
-source("../Redux_Functions.R")
+source("Redux_Functions.R")
 
 ```
 
@@ -53,7 +53,7 @@ source("../Redux_Functions.R")
 ```{r fig-1, fig.height=5, fig.width=7, fig.cap= "A map of the Homa Peninsula. Kanjera South is situated to the East of Homa Mountain. The Homa Mountain carbonatite center is the primary source of the local raw materials including Homa limestone (HLi), Homa Phonolite (HPh), and Fenetized nyanzian rocks (FNy). Drainages coming off the flanks of Homa Mountain carry these local rock types to within the immediate vicinity of Kanjera South. Distant or exotic raw materials originate in river conglomerates much farther to the east of the Samanga Fault. These include Bukoban andesite (BBa), Bukoban felsite (BFe), Bukoban quartzite (BQu), Nyanzian rhyolite (NyR), and Oyugis granite (OGr)  \\label{map}"}
 
 
-dem <- raster("../Data/Figure_1_Data/Homa_Penninsula_DEM_30m2.tif")
+dem <- raster("../../Data/Figure_1_Data/Homa_Penninsula_DEM_30m2.tif")
 
 dem[dem$Homa_Penninsula_DEM_30m2 <= 1134] <- NA
 slope <- raster::terrain(dem, opt = "slope")
@@ -67,10 +67,10 @@ hs <- hillShade(slope = slope,
 
 hs <- data.frame(rasterToPoints(hs))
 
-water <- read_sf("../Data/Figure_1_Data/ke_major-rivers.shp")
-kjs <- read_sf("../Data/Figure_1_Data/KJS_WSG_84.shp")
-rivers2<-read_sf("../Data/Figure_1_Data/Rivers_homa_WGS2.shp")
-fault <- read_sf("../Data/Figure_1_Data/SamangaFault_WGS.shp")
+water <- read_sf("../../Data/Figure_1_Data/ke_major-rivers.shp")
+kjs <- read_sf("../../Data/Figure_1_Data/KJS_WSG_84.shp")
+rivers2<-read_sf("../../Data/Figure_1_Data/Rivers_homa_WGS2.shp")
+fault <- read_sf("../../Data/Figure_1_Data/SamangaFault_WGS.shp")
 st_geometry(kjs) <- NULL
 
 ggplot()+
@@ -144,7 +144,7 @@ A total of 1500 stone artifacts (171 cores and 1329 flakes) were analyzed using 
 ```{r cores prep, echo=FALSE}
 
 ## Read Cores
-cores <- read.csv("../Data/kjs_cores_2021.csv", stringsAsFactors = FALSE)
+cores <- read.csv("../../Data/kjs_cores_2021.csv", stringsAsFactors = FALSE)
 
 ## Re-Order Factor Levels
 cores$DeLaTorre.Typology <- ordered(cores$DeLaTorre.Typology, 
@@ -161,7 +161,7 @@ cores$DeLaTorre.Typology <- ordered(cores$DeLaTorre.Typology,
 
 ## Add Raw Material Provenance Data
 
-cores$rm.provenance <- "Distant"
+cores$rm.provenance <- "Exotic"
 cores$rm.provenance[cores$RM %in% c("HLI", "FNY", "HPH")] <- "Local"
 cores$RM <- factor(cores$RM, levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
 
@@ -200,7 +200,7 @@ kable(cores_table, caption = "A summary of the cores included in this analysis \
 
 ```{r flake prep, echo=FALSE}
 
-flakes <- read.csv("../Data/kjs_flakes_2021.csv")
+flakes <- read.csv("../../Data/kjs_flakes_2021.csv")
 
 flakes$Raw.Material <- factor(toupper(flakes$Raw.Material), levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
 flakes$rm.provenance <- "Distant"
@@ -261,11 +261,13 @@ flake.res <- wilcox.test(flakes$flake.seq~
   
 ```{r fig-3, echo = FALSE, warnings=FALSE, dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= "The distribution of core reduction intensity values as predicted by the GLMM (Douglass et al 2018). The results show stark differences in the degree of reduction in materials originating from more distant sources than those that originate from local sources of stone. \\label{core_redux_rm}"}
 
+rm_labs <- c("BBa", "BFe", "BQu", "NyR", "OGr", "HLi", "HPh", "FNy")
 a <- ggplot(cores, aes(x = RM, y = fixedpredict, fill = rm.provenance)) + 
    geom_boxplot(show.legend = FALSE) + 
    scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
    scale_y_continuous(limits = c(0,1))+
-   labs(x = "Raw Material", y = "Reduction intensity (% Mass Lost)") +
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Reduction intensity (% mass lost)") +
    theme(panel.background = element_rect(color = "black", fill = "white"))
 
 
@@ -273,12 +275,12 @@ b <- ggplot(cores, aes(x = rm.provenance, y = fixedpredict, fill = rm.provenance
    geom_boxplot(show.legend = FALSE) + 
    scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
    scale_y_continuous(limits = c(0,1))+
-   labs(x = "Raw Material Provenance", y = "Reduction intensity (% Mass Lost)")+
+   labs(x = "Raw material provenance", y = "Reduction intensity (% mass lost)")+
    theme(panel.background = element_rect(color = "black", fill = "white"))
 
 #### For saving the figure
-#c <- arrangeGrob(a,b, ncol = 2)
-#ggsave(filename = "../Figures and Tables/Figure 3.png", c, height = 3, width = 6, units = "in")
+c <- arrangeGrob(a,b, ncol = 2)
+ggsave(filename = "../Figures and Tables/Figure 3.png", c, height = 3, width = 6, units = "in")
 
 #### Visualizing the Figure
 
@@ -292,8 +294,9 @@ grid.arrange(a,b, ncol = 2)
 ggplot(flakes, aes(x = Raw.Material, y = flake.seq, fill = rm.provenance)) + 
    geom_boxplot()+
    scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
-   labs(x = "Raw Material", y = "Flake Sequence")+
-   guides(fill=guide_legend(title="Raw Material Provenance")) +
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Flake sequence")+
+   guides(fill=guide_legend(title="Raw material provenance")) +
    theme(panel.background = element_rect(color = "black", fill = "white"),
          legend.position = "top")
 
@@ -322,7 +325,7 @@ fisher.p <- round(fisher.res$p.value,4)
 redux.tech<-ggplot(cores, aes(x = DeLaTorre.Typology, y = fixedpredict, fill = DeLaTorre.Typology)) +
    geom_boxplot() +
    scale_fill_brewer(type = "div", palette = 6, direction = -1) + 
-      labs(x = "Core Reduction Strategy", y = "Reduction intensity (% Mass Lost)")+
+      labs(x = "Core reduction strategy", y = "Reduction intensity (% mass lost)")+
       guides(fill=guide_legend(title="Provenance")) +
    scale_x_discrete(labels= c("USP", "UAU", "UABI", "BA", "BAP", "UC", "BC","Poly", "MFI"))+
    theme(panel.background = element_rect(color = "black", fill = "white"),
@@ -332,8 +335,9 @@ redux.tech<-ggplot(cores, aes(x = DeLaTorre.Typology, y = fixedpredict, fill = D
 
 rm.tech <- ggplot(cores, aes(x =RM , fill = DeLaTorre.Typology)) +
    geom_bar(position = "fill") +
-      scale_fill_brewer(type = "div", palette = 6, direction = -1) + 
-   labs(x = "Raw Material", y = "Relative Frequency") + 
+   scale_fill_brewer(type = "div", palette = 6, direction = -1) + 
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Relative frequency") + 
    theme(panel.background = element_rect(color = "black", fill = "white"),
          legend.position = "none")
 
@@ -362,10 +366,11 @@ e2m.stat <- as.numeric(e2m.res$statistic)
 a <-ggplot(data=flakes[flakes$Raw.Material!="OGR",], aes(x=Raw.Material, y= PerMass, fill=rm.provenance))+
   geom_jitter()+
   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+  scale_x_discrete(labels = rm_labs)
    theme(legend.position = "top",
          panel.background = element_rect(color = "black", fill = "white")) +
    geom_violin()+
-  ylab("Edge to Mass Ratio mm/log(grams)")+
+  ylab("Edge to mass ratio mm/log(grams)")+
   labs(fill = "Provenance")+
   xlab("Raw Materials")
 
@@ -382,8 +387,8 @@ b <- ggplot(flakes[flakes$Raw.Material!="OGR",], aes(x = flake.seq, y = PerMass,
          axis.text.y = element_text(color = "white"))
 
 ### For Saving Figure
-#c<- arrangeGrob(a, b, ncol =2)
-#ggsave(filename = "Figures and Tables/Figure 6.png",c ,height = 4, width = 6.5, units = "in")
+c<- arrangeGrob(a, b, ncol =2)
+ggsave(filename = "Figures and Tables/Figure 6.png",c ,height = 4, width = 6.5, units = "in")
 
 grid.arrange(a,b, ncol = 2)
 ```
