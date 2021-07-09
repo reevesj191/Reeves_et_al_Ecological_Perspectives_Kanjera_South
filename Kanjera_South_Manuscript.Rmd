@@ -1,0 +1,479 @@
+---
+title: Ecological perspectives on technological diversity at Kanjera South
+author:
+  - name: Jonathan S. Reeves
+    email: Jonathan_Reeves@eva.mpg.de
+    affiliation: Max Planck Institute For Evolutionary Anthropology
+  - name: David R. Braun
+    email: 
+    affiliation: The George Washington University
+  - name: Emma M. Finestone
+    email: 
+    affiliation: Max Plank Institute For the Science of Human History
+  - name: Thomas W. Plummer
+    email: 
+    affiliation: Queens College City University of New York
+
+address:
+  - code: MPI
+    address: Technological Primates Research Group, Max Planck Institute For Evolutionary Anthropology, Deutscher Platz 6, Leipzig, 04103, Germany
+  - code: CASHP
+    address: Center for the Advanced Study of Human Paleobiology, George Washington University, 800 22nd Street, North West, Washington, D.C., USA
+  - code: SHH
+    address: Department of Archaeology, Max Planck Institute for the Science of Human History, Kahlaische Strasse 10, Jena, D-07743, Germany 
+  - code: NYCEP
+    address: Dept of Anthropology, Queens College, City University of New York, Flushing, NY, 11367-1597, USA      
+
+abstract: |
+  The aspects of hominin behavior responsible for Oldowan stone tool variation are the focus of much debate. There is some consensus that this variation arises from a combination of ecological and cultural factors. The diversity of raw material types and technological strategies present at Kanjera South, Kenya, provide an opportunity to examine the interacting influences of ecology and culture on Oldowan stone tool variation. Here, we combine previous analyses of raw material properties, provenance, and technology with quantitative measures of core reduction intensity and tool utilization to examine the influence of both ecological and technocultural factors on stone tool variation at Kanjera South. The results of this analysis reflect a dynamic relationship between raw material properties, provenance, and hominin mobility. Exotic raw materials are generally more resistant to edge attrition compared with those available locally, which may have incentivized their transport over long distances and more extensive reduction. Cores produced on raw materials from distant sources also exhibit more complex core reduction strategies than locally acquired materials. While this pattern is partially due to the differences in the quality of knappable stone, bifacial centripetal and multifacial core reduction strategies also arise due to the continuous transport and use of exotic raw materials. Moreover, the variation in stone tool reduction is not consistent with neutral models of stone tool transport and discard. These results demonstrate that ecological factors such as raw material provenance and physical properties have strong impacts on reduction intensity and the technological strategies used by hominins.
+
+journal: "Journal of Human Evolution"
+date: "`r Sys.Date()`"
+bibliography: mybibfile.bib
+#linenumbers: true
+#numbersections: true
+csl: journal-of-human-evolution.csl
+output: rticles::elsevier_article
+---
+
+```{r step up, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE, 
+                      tiff_figures = TRUE)
+library(png)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(dplyr)
+library(raster)
+library(ggplot2)
+library(ggsn)
+library(ggrepel)
+library(sf)
+library(ggnewscale)
+library(knitr)
+library(kableExtra)
+source("Redux_Functions.R")
+load("KJS_GIS.RData")
+load("KJS.RData")
+```
+
+1. Introduction
+===============
+
+Upon its initial discovery, the Oldowan was considered an expedient industry that was akin to simply smashing stones. Nearly a century later, the Oldowan is now known to reflect a complex behavioral pattern that encompasses not only the technical capacity to efficiently produce flakes but also dynamic patterns of tool transport. Technological analyses show that Oldowan hominins had at least a basic understanding of the general principles of flaking and selection of suitable tool stones for artifact manufacture [@braunEarliestKnownOldowan2019; @braunOldowanTechnologyRaw2009; @delagnesLatePlioceneHominid2005; @delatorreOmoRevisitedEvaluating2004; @goldman-neumanRawMaterialSelectivity2012; @semawWorldOldestStone2000; @stoutRawMaterialSelectivity2005; @tothOldowanCaseStudies2006]. This pattern of tool production was integrated into a broader land-use strategy in which raw material was acquired, transported, used, maintained, and eventually discarded (​Isaac and Harris, 1975​; ​Hay, 1976​; ​Isaac, 1981​, ​1984​; ​Toth, 1985​, ​1987​; ​Schick, 1987​; ​Potts, 1991​, ​1994​; ​Blumenschine and Peters, 1998​; ​Potts et al., 1999​; ​Blumenschine et al., 2008​; ​Braun et al., 2008a​). Although these actions remained simple, the various ways in which they were combined reflect a variety of production strategies that can be evaluated on a site-by-site basis (​Delagnes and Roche, 2005​).
+
+Research has revealed a wide range of technological diversity in the Oldowan across time and space. A primary objective of current Oldowan research is identifying the behavioral processes that shaped such a diversity of production strategies (​Plummer, 2004​; ​Roche et al., 2009​; ​Gallotti, 2018​). A multitude of work now links the technical diversity of the Oldowan to the cognition, skill, social transmission of information, and, in some cases, social learning mechanisms of Plio-Pleistocene hominins (​Schick and Toth, 1994​; ​Stout and Chaminade, 2009​; ​Hovers, 2009​, ​2012​; ​Stout, 2011​; ​Goldman-Neuman and Hovers, 2012​; ​Roche et al., 2018​; ​Toth and Schick, 2018​; ​Stout et al., 2019​). However, while our understanding of technical decision-making has dramatically increased, research focusing on ecological influences on Oldowan technological diversity, such as land use and tool transport, has waned in recent decades (​de Torre and Mora, 2009​).
+
+Although stone tool diversity is linked to constraints imposed by raw material geometry, quality, and abundance (​Toth, 1982​, ​1985​, ​1987​; ​Potts, 1988​, ​1991​; ​de la Torre, 2004​; ​Blumenschine et al., 2008​; ​Braun et al., 2009a​), how hominin tool transport and more broadly land-use patterns influence the technical decision-making of Oldowan tool makers remains unclear. Early work on this subject suggested that Oldowan technological diversity reflects a continuum of reduction as stone is moved across the landscape (​Toth, 1985​; ​Potts, 1991​). While ​Potts (1991)​ illustrated an interesting relationship between mass and Leakey's typological core categories, little work has been done to further establish connections between hominin land use and technological diversity.
+
+The ~2.0 Ma site of Kanjera South contributes to our understanding of the relationship between stone tool production, technical decision-making, and hominin behavioral ecology. The lithic assemblage at Kanjera South shows a substantial representation of exotic raw materials (e.g., rock types not available within 10 km of the archaeological site) and a diversity of different core reduction strategies that provide an opportunity to understand the technical decision-making within the context of broader hominin land-use strategies. Although early Oldowan assemblages dating to 2.0 Ma and older illustrate a similar level of technological competence to those from later time frames, substantially less is known about the broader foraging behaviors and land-use strategies of hominins during this interval. An investigation of hominin stone tool transport and utilization patterns at Kanjera would not only add to our understanding of how the landscape structures stone tool use and transport but also further elucidate the relationship between Oldowan technological strategies and land use.
+
+To this end, we present a new study of the Kanjera South lithic material that combines previous analyses of raw material properties, provenance, and technology with quantitative measures of core reduction intensity and tool utilization to elucidate the broader land-use pattern. We show that the technological variation at Kanjera South reflects an interaction of raw material properties, foraging ecology, and landscape scale constraints on raw material availability. We further characterize the broader pattern of land use of Oldowan hominins at Kanjera South and show that this pattern may condition the economization of stone resources across space. This study sheds light on the environmental and technical variables that contribute to Oldowan stone tool variability and provides unique insight into hominin land-use patterns in the early Oldowan.
+
+## 1.1 Background to Kanjera South
+
+The ~2.0 Ma site of Kanjera South is situated on the northeastern side of the Homa Peninsula on the edges of the Nyanza Rift near the shores of Lake Victoria (@plummerResearchLatePliocene1999; @ditchfieldGeochronologyPhysicalContext2019, Fig. \ref{map}). The extensive excavation of a 3-m-deep sequence of silts and clays recovered more than 3000 fossils and more than 4000 stone artifacts (​Plummer et al., 2009a​). Spatially associated artifacts and fossils are found as both diffuse scatters and vertically discrete horizons throughout this sequence. Although the bulk of the archaeological sample is derived from a single package of sediment called KS-2 (​Plummer and Bishop, 2016​), the large number of artifacts recovered throughout the sequence suggests that the site was repeatedly visited over the course of this interval (​Ferraro et al., 2013​). The stratigraphy at Kanjera South is made up of approximately 30 m of fluvial, colluvial, and lacustrine sediments (​Ditchfield et al., 2019​). Extensive research on the geochronology and sedimentary context has demonstrated that the lithics and fossils accumulated predominantly by hominin activity (​Behrensmeyer et al., 1995​; ​Plummer et al., 2009a​, ​2009b​; ​Ferraro et al., 2013​; ​Ditchfield et al., 2019​).
+
+```{r fig-1, fig.height=5, fig.width=6.5, fig.cap= "A map of the Homa Peninsula. Kanjera South is situated to the east of Homa Mountain. The Homa Mountain carbonatite center is the primary source of the local raw materials including Homa limestone, Homa phonolite, and fenetized Nyanzian rocks. Drainages coming off the flanks of Homa Mountain carry these local rock types to within the immediate vicinity of Kanjera South. Distant or exotic raw materials originate in river conglomerates much farther to the east of the Samanga Fault. These include Bukoban andesite, Bukoban felsite, Bukoban quartzite, Nyanzian rhyolite, and Oyugis granite. \\label{map}"}
+
+
+dem[dem$Homa_Penninsula_DEM_30m2 <= 1134] <- NA
+slope <- raster::terrain(dem, opt = "slope")
+aspect <- terrain(dem, opt = "aspect")
+dem <- data.frame(rasterToPoints(dem))
+hs <- hillShade(slope = slope,
+                aspect = aspect,
+                angle = 50,
+                direction = 315,
+                normalize = TRUE)
+
+hs <- data.frame(rasterToPoints(hs))
+
+st_geometry(kjs) <- NULL
+
+ggplot()+
+   geom_raster(data = hs,aes(x=x, y=y, fill = layer),show.legend = FALSE)+
+   scale_fill_gradientn(colours = grey.colors(100,start = .5, end = 0))+
+   new_scale_fill()+
+   geom_raster(data = dem[dem$Homa_Penninsula_DEM_30m2 > 1134 & dem$Homa_Penninsula_DEM_30m2 < 2000,],
+               aes(x=x,y=y,fill = Homa_Penninsula_DEM_30m2),alpha = .4, inherit.aes = FALSE)+
+   geom_sf(data = rivers2, color = "dodger blue2", alpha = .5)+
+   geom_sf(data = fault,linetype =2) +
+   geom_sf_text(data = fault, aes(label = "Samanga Fault"), angle = 47, nudge_y = -.015)+ 
+   scale_fill_gradientn(colours = terrain.colors(100), "Elevation (m)")+
+   geom_point(data = kjs, aes(x= X, y = Y)) +
+   geom_label_repel(data= kjs, aes(x = X, y = Y,label = Local),
+                  box.padding   = 1, 
+                  point.padding = .5,
+                  segment.color = 'black',
+                  color = "black")+
+   
+   north(location = "bottomleft", symbol = 10, x.min = 34.43,x.max = 34.9, y.min = -0.525, y.max = -.27195)+
+   scalebar(location = "bottomleft",dist_unit = "km",dist = 4, x.min = 34.44,x.max = 34.9, y.min = -0.528, y.max = -.275, 
+            transform = TRUE,st.dist = .025) + 
+   scale_x_continuous(limits = c(34.42,34.8), expand = c(0,0))+
+   scale_y_continuous(limits = c(-0.55,-.275), expand = c(0,0))+
+   theme(panel.background = element_rect(fill = "dodger blue1"),
+         panel.grid = element_blank(),
+         panel.spacing = unit(1, "cm"),
+         axis.text = element_blank(),
+         axis.title = element_blank(),
+         axis.ticks = element_blank()
+         )
+
+
+```
+
+The frequencies of different bovids and enamel isotope studies indicate that the landscape surrounding Kanjera South, unlike the setting of many Oldowan sites, was dominated by a grassland as opposed to more closed habitats (​Plummer et al, 2009a​, ​2009b​). Zooarchaeological evidence at Kanjera South strongly implicates a scenario where hominins had early access to small carcasses and mixed access to larger carcasses (​Oliver et al., 2019​). This record is consistent through the stratified sequence, suggesting that persistent carnivory spanned hundreds to thousands of years (​Ferraro et al., 2013​). Although Kanjera South is considered to have been of significance to hominins, it is difficult to determine if there was something unique about its location specifically or if the Homa Peninsula was simply a hospitable place (​Behrensmeyer et al., 1995​). Substantial faulting in the region makes it difficult to assess the ecological qualities of Kanjera South within a broader landscape context.
+
+Extensive geological surveys of the Homa Peninsula and the surrounding area reveal a high diversity of igneous and metamorphic rocks that provided a wide range of suitable materials that hominins could use for flake production (​Saggerson, 1952​; ​Le Bas, 1977​; ​Braun et al., 2008a​; ​Finestone et al., 2020​). As such, this diversity is reflected in the lithic assemblage. More than 16 different rock types are represented in the assemblage although the bulk of the material is produced on eight of them (​Braun et al., 2008a​). Geochemical provenance studies of the lithic material make it possible to further subdivide the lithic assemblage to two broad categories: local and exotic (​Table 1​; ​Braun et al., 2008a​). Local materials are derived from the Homa Mountain carbonatite center (​Fig. 1​). Drainages running off the flanks of this mountain would have carried materials such as phonolite, limestone, and fenetized rocks within the immediate vicinity of Kanjera South. Sources of the exotic materials such as quartzite, rhyolite, andesite, and granite are located further to the east in places such as the Kisi Highlands and Oyugis (​Fig. 1​). While these materials were likely acquired from river channels traveling westward toward Kanjera South, they are not present in Pleistocene river conglomerates within 10 km of Kanjera South (​Braun et al., 2008a​).
+
+```{r}
+
+
+kable(table1, format = "simple",
+      
+      col.names = c("Raw Material", "Origin", "Provenance"), 
+      caption = "A list of rock types found at Kanjera South included in this analysis \\label{table1}")
+
+```  
+
+The Kanjera South lithic assemblage is distinguished from other Oldowan assemblages by the number of raw materials represented and the diversity of technological production strategies present within the assemblage. Unlike most other Oldowan sites from this time frame which have a predominate core reduction strategy present (see ​Gallotti, 2018​), the flake production strategies at Kanjera South range from simple unifacial techniques to bifacial and multifacial techniques (​Fig. \ref{tools}​). Previous work has suggested that some of this diversity reflects the differences in the quality of available raw materials or the need to maximize the number of flakes removed from high quality materials (​Braun et al., 2009a​). The wide range in diversity of materials from local and exotic sources and technological reduction strategies provide an opportunity to investigate the dynamics between hominin land-use patterns, stone tool production, and Oldowan assemblage variability.
+
+```{r fig-2, echo=FALSE, fig.cap="Examples of the stone artifacts found at Kanjera South. (A) Core produced on Homa limestone. (B) Core produced on Oyugis granite. (C) Core produced on Bukoban quartzite. (D) Core produced on Fenetized nyanzian.  \\label{tools}", fig.height=5.5, fig.width=5.5, warning=FALSE, paged.print=FALSE, include=FALSE}
+
+figure_02 = readPNG("Figure_2.png")
+  g <- rasterGrob(figure_02, interpolate=TRUE)
+  ggplot(NULL, aes(NULL, NULL)) + geom_blank() + xlab('') + ylab('') +
+    annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)+
+    theme(panel.background = element_blank())
+```
+
+2 Materials and methods
+=======================
+
+## 2.1 Materials
+
+To explore the relationship between stone tool transport and Oldowan assemblage variability, we characterize the technology of stone tools produced on both exotic and local materials at Kanjera South (​Table \ref{table1}​) through the study of the core and complete flake assemblages (i.e., our analysis at this time does not incorporate angular fragments; ​Tables 2 and 3​). Preexisting knowledge regarding raw material provenance, raw material properties, and core exploitation strategies (​Braun et al., 2009a​, ​2009b​; ​Finestone et al., 2020​) was combined with an in-depth analysis of the lithic material designed to quantify the intensity of stone tool utilization before their discard at Kanjera South.
+
+
+```{r cores prep, echo=FALSE, fig.width= 6}
+
+## Re-Order Factor Levels
+cores$DeLaTorre.Typology <- ordered(cores$DeLaTorre.Typology, 
+                                   levels = c("unifacial simple partial",
+                                              "unidirectional abrupt unipolar",
+                                              "unidirectional abrupt bipolar",
+                                              "bidirectional abrupt",
+                                              "bifacial partial",
+                                              "unifacial centripetal",
+                                              "bifacial centripetal",
+                                              "polyhedral",
+                                              "multifacial irregular"))
+                                              
+
+## Add Raw Material Provenance Data
+
+cores$rm.provenance <- "Exotic"
+cores$rm.provenance[cores$RM %in% c("HLI", "FNY", "HPH")] <- "Local"
+cores$RM <- factor(cores$RM, levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
+
+## Calculate Core Redux
+
+cores$fixedpredict <- core.redux.kjs(cores, vars = c("Accession.Number", "FlakScars", "Interactions", "AverageAngle"))
+
+cores_table <- cores %>% 
+   group_by(RM) %>%
+   dplyr::summarise("N" = dplyr::n(),
+              "Avg. Length (mm)" = round(mean(Axis1),2),
+              "Avg. Width (mm)" = round(mean(Axis2),2),
+              "Avg. Thick (mm)" = round(mean(Axis3),2),
+              "Avg. Mass (g)" = round(mean(Mass),3),
+              "Avg. N flake scars" = round(mean(FlakScars)), 
+              "Avg. Exploitation Surfaces" = round(mean(ExploitationSurfaces)),
+              "Avg. Surface Interactions" = round(mean(Interactions)),
+              "Min. Per. Mass Lost" = round(min(fixedpredict * 100)),
+              "Avg. Per. Mass Lost" = round(mean(fixedpredict * 100)),
+              "Max. Per. Mass Lost" = round(max(fixedpredict * 100)))
+
+
+kable(cores_table,
+      caption = "A summary of the cores included in this analysis. \\label{table2}", 
+      format = "latex", 
+      booktabs = T) %>% 
+  kable_styling(latex_options = c("hold_position", "scale_down")) %>%
+  landscape()
+
+```
+
+```{r flake prep, echo=FALSE, fig.width= 6}
+
+
+flakes$Raw.Material <- factor(toupper(flakes$Raw.Material), levels = c("BBA", "BFE", "BQU", "NYR","OGR", "NYC", "HLI", "HPH", "FNY"))
+flakes$rm.provenance <- "Distant"
+flakes$rm.provenance[flakes$Raw.Material %in% c("HLI", "FNY", "HPH")] <- "Local"
+
+flakes$flake.seq <- flake.sequence(flakes, c("ID", 
+                                              "Length", 
+                                              "Width",
+                                              "N.Flake.Scars",
+                                              "Flake.scar.direction",
+                                              "Platform.facets",
+                                              "Percent.Cortex"))
+
+
+flakes_table <- flakes %>% dplyr::group_by(Raw.Material) %>%
+   dplyr::summarise("N" = dplyr::n(),
+                    "Avg. Length" = round(mean(Length),2),
+                    "Avg. Width" = round(mean(Length),2),
+                    "Avg. Mass (g)" = round(mean(Mass),3),
+                    "Avg. N of platform facets" = round(mean(Platform.facets)),
+                    "Avg. N of dorsal scars" = round(mean(N.Flake.Scars)), 
+                    "Avg. N of scar dir" = round(mean(Flake.scar.direction)),
+                    "Avg. percent cortex" = round(mean(Percent.Cortex),2),
+                    "Avg. Flake Seq" = round(mean(flake.seq)), 
+                    "Avg. Edge to Mass Ratio" = round(mean(PerMass, na.rm = TRUE),2))
+
+flakes_table <- flakes_table %>% rename(RM = Raw.Material)
+
+kable(flakes_table,
+      format = "latex",
+      booktabs = T,
+      caption = "A summary of the flakes included in this analysis. \\label{table3}") %>%
+  kable_styling(latex_options = c("hold_position", "scale_down")) %>%
+  landscape()
+
+```
+
+  A total of 1500 stone artifacts (171 cores and 1329 flakes) were analyzed using a series of continuous and ordinal variables (refer following paragraphs). ​Tables \ref{table2} and \ref{table3}​ provide a detailed summary of the number of lithics per raw material included. The raw data for this analysis can also be accessed through the GitHub repository (refer Supplementary Online Material [SOM]). In addition to the previously published technological analysis, the cores were also categorized using ​de la Torre and Mora's (2005)​ idealized schemes of free-hand core reduction (​de la Torre Ignacio, 2011​). These measurements provided a way to characterize the assemblage in terms of core and flake utilization using measures of core reduction intensity, flake sequence, and edge-to-mass ratios.
+  
+## 2.2 Estimating Core Reduction Intensity
+
+  The continuous removal of flakes influences a variety of core attributes that interact throughout the reduction sequence (​Douglass et al., 2018​). As a result, core utilization can be understood in terms of reduction intensity. Core reduction intensity has previously been estimated from a diversity of variables ranging from mass and the number of flake scars to more sophisticated methods that use linear models to estimate the degree to which a core has been reduced (​Toth, 1985​; ​Potts, 1991​; ​Clarkson, 2013​; ​Li et al., 2015​; ​Douglass et al., 2018​; ​Lombao et al., 2019​). Simple measures such as mass and the number of flake scars are not always appropriate because nodules selected for exploitation are sometimes not similar in size. This is particularly the case at Kanjera South, where tool stones originate from a variety of sources and can vary substantially in nodule size (​Braun et al., 2008a​). The number of flake scars does not reflect a one-to-one relationship with reduction intensity because the continuous removal of flakes erases evidence of previous removals (​Braun et al., 2005​; ​Moore and Perston, 2016​). As a result, multivariate estimates of core reduction intensity provide the tools needed to simultaneously consider a suite of attributes as opposed to a single variable.
+
+Here, we follow methods outlined by ​Douglass et al. (2018)​ to estimate the reduction intensity of individual cores to calculate the proportion of mass lost before its discard using a predictive generalized linear model. This model was developed based on the experimental reduction of cobbles collected from the Homa Peninsula, specifically to estimate the reduction intensity of cores recovered from Kanjera South. Estimates of core reduction intensity are accurate within an error range of 10% (​Douglass et al., 2018​), and application to a subset of the cores from the Kanjera South assemblage suggests that the model is generally applicable to the broader Kanjera South assemblage. To estimate core reduction intensity, the model considers the number of flake scars, exploitation surfaces, the number of exploitation surface convergences, and average platform angle. The definitions of the aforementioned attributes are outlined in ​Douglass et al. (2018)​ and summarized here.
+
+The number of flake scars refers to the number of previous flake removals present on the core. The number of exploitation surfaces refers to the number of areas of the core where flakes were removed along a similar axis. This variable is related to core rotation which is argued to increase as core reduction increases (e.g., ​Delagnes and Roche, 2005​). The number of exploitation surface convergences documents the number of times different exploitation surfaces intersect with each other. Throughout reduction, exploitation surfaces with different flaking axes tend to converge (​Braun et al., 2005​, ​Douglass et al., 2018​). Average platform angle, measured in degrees, refers to the mean angle between striking surfaces. Various experimental replication studies show that, as this angle approaches 90°, it becomes increasingly difficult to detach a flake (​Cotterell et al., 1985​). Thus, as a core approaches exhaustion, the platform angles on the core are likely to approach 90°. More details regarding the specification of the model and associated lithic attributes can be found in ​Douglass et al. (2018)​.
+
+## 2.3 Flake Sequence Estimates
+
+Flake sequence generally can be defined as the order number that a given flake was removed from the core. It is a complementary measure to core reduction intensity as it examines the influence of core reduction on the flake assemblage. The distribution of flake sequence values within an assemblage can provide insight into the relationship between stone tool transport and assemblage formation (​Toth, 1985​, ​1987​). For example, if sequence values from the beginning of the reduction sequence (i.e., the 1st, 2nd, 3rd flakes removed) are absent from the flake assemblage, this could indicate that early-stage flakes were discarded before the core's arrival at the site or were removed off site. In the Early Stone Age, flake sequences are most commonly characterized using a six-category classification system (more colloquially known as Toth types), based on the presence of cortex on a flake's platform and/or dorsal surface (​Toth, 1985​).
+
+Here, we follow Braun et al. (2008), who use a multilinear model to estimate flake sequence values. Unlike Toth's flake types that categorize flakes into sixdiscreet stages, the multilinear model allows for a more specific placement of a flake within a reduction set (within a prescribed error). The predictive model uses flake length, width, number of platform facets, number of flake scars, and the number of flake scar directions; specific details for each measurement are outlined in Braun et al. (2008: 2156, fig 3.). Before the sequence number can be estimated, the number of flake scars and amount of dorsal cortex must be divided by the log of the surface area of the flake (​Braun et al., 2008c​). These variables are then used by the predictive model to estimate the flake sequence number. Flake sequence estimates have a maximum error between ± 8 steps in the sequences  number   number(​Braun et al., 2008c​). Despite this error, an application of the method to refitting sequences from the Koobi Fora Formation showed that it always places flakes correctly in their relative order (​Braun et al., 2008c​). Therefore, while information derived from individual flake sequence estimates may be coarse grained, it remains useful for assemblage-scale comparisons.
+
+```{r fig-3, echo = FALSE, warnings=FALSE, dpi= 1000,fig.height= 3, fig.width= 6, fig.cap= "Box plots showing the distribution of core reduction intensity values as predicted by the generalized linear mixed model (​Douglass et al., 2018​). The results show stark differences in the degree of reduction in materials originating from more distant sources than those that originate from local sources of stone. The central bar is the median value (50th percentile). The lower and upper edges of the box represent the 1st and 3rd quartiles. The length of the upper whisker reflects the maximum value of the data that is not 1.5 times greater than the 75th percentile. The length of the lower whisker is the minimum value of the data not less than 1.5 times the 25th percentile. The dark circles are observations that are either 1.5 times greater than the 75th percentile or 1.5 times less than the 25th percentile. \\label{core_redux_rm}"}
+
+rm_labs <- c("BBa", "BFe", "BQu", "NyR", "OGr", "HLi", "HPh", "FNy")
+a <- ggplot(cores, aes(x = RM, y = fixedpredict, fill = rm.provenance)) + 
+   geom_boxplot(show.legend = FALSE) + 
+   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+   scale_y_continuous(limits = c(0,1))+
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Reduction intensity (% mass lost)") +
+   theme(panel.background = element_rect(color = "black", fill = "white"))
+
+
+b <- ggplot(cores, aes(x = rm.provenance, y = fixedpredict, fill = rm.provenance)) + 
+   geom_boxplot(show.legend = FALSE) + 
+   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+   scale_y_continuous(limits = c(0,1))+
+   labs(x = "Raw material provenance", y = "Reduction intensity (% mass lost)")+
+   theme(panel.background = element_rect(color = "black", fill = "white"))
+
+#### For saving the figure
+# c <- arrangeGrob(a,b, ncol = 2)
+# ggsave(filename = "../Figures and Tables/Figure 3.png", c, height = 3, width = 6, units = "in")
+
+#### Visualizing the Figure
+
+grid.arrange(a,b, ncol = 2)
+```
+
+## 2.4 Flake Efficiency
+
+Flake efficiency was calculated for a subset of flakes included in this analysis (SOM Table S1). Assuming that most stone tools are produced to create sharp edges, one possible measure of flake efficiency is estimating the amount of sharp edge produced per given unit of mass. Technologies that produced a higher amount of edge per volume of material can be considered more efficient (​Braun and Harris, 2003​). Here, we use a measure of edge that is based on tracing the edge of whole flakes from digital images (​Braun and Harris, 2003​). To calculate efficiency, this edge estimate is divided by the logarithmic transformation of mass (​Braun and Harris, 2003​). This transformation is important when calculating this ratio because mass increases volumetrically flake edge increases in two dimensions. Thus, the logarithmic transformation of mass prevents distortions of this ratio that are size correlated (i.e., allometric). For example, very small flakes have relatively high edges for a given amount of mass, but this is not always the most efficient way to produce the greatest amount of edge relative to volume (e.g., for discussions on this topic, refer to ​Kuhn, 1990​). Flakes that have long edges relative to their mass tend to be relatively thin flakes, and there is the possibility that the efficiency of these tools is limited by their capabilities to complete certain tasks (e.g., tasks that require intensive use of edges such as hide scraping may not be feasible with relatively thin flakes). Here, we calculate the edge-to-mass ratio of flakes within raw material categories. These values then can be studied according to raw material type and provenance as aggregate measures are likely more reflective of the generalized pattern of efficiency in tool production over time.
+
+## 2.5 Statistical Comparisons
+
+The following statistical comparisons were made to elucidate the broader land-use strategy of the Kanjera South hominins. To examine the influence of raw material provenance and transport on core utilization, core reduction intensity values, flake sequence values, and edge-to-mass ratio values were compared according to raw material provenience (i.e., local versus exotic). The significance of these differences between local and exotic material was tested using Mann-Whitney U tests as our data were not normally distributed, and significant differences were determined using an alpha level of 0.05 (​Gotelli and Ellison, 2013​). To determine whether there is relationship between raw material provenance and the core reduction strategies used at Kanjera South, the frequency of idealized free-hand reduction types was compared by raw material type using Fisher's exact test (​Gotelli and Ellison, 2013​) because some of the reduction strategies are represented by 4 or fewer cores. Finally, core reduction intensity values were also analyzed according to raw material type. A Kruskal-Wallis test was used to assess the significance of these differences. All statistical analyses were performed in R v. 3.6 (​R Core Team, 2018​). Given the number of quantitative approaches used in this study, we have made the R code and markdown documents used to conduct this analysis available online.
+
+3 Results
+=========
+
+## 3.1 Core Utilization
+
+```{r}
+core.res <- wilcox.test(cores$fixedpredict~cores$rm.provenance)
+core_w <- as.numeric(core.res$statistic)
+core_p <- as.numeric(core.res$p.value)
+if(core_p < .0001){
+  core_p <- "< .0001"
+}
+
+flake.res <- wilcox.test(flakes$flake.seq~
+             flakes$rm.provenance)
+fs_w <- as.numeric(flake.res$statistic)
+fs_p <- as.numeric(flake.res$p.value)
+if(fs_p < .0001){
+  fs_p <- "< .0001"
+}
+
+
+```
+
+Core reduction intensity estimates reveal a wide range of variation in the amount of mass removed from the cores at Kanjera South. Some cores were minimally used, whereas others were reduced by as much as 95% of their original mass. While there are some differences in the level of reduction between individual raw material types, the primary differences are driven by raw material provenance (​Fig. \ref{core_redux_rm}​). Cores produced on raw material types that originate from more distant sources (Bukoban andesite (BBa), Bukoban felsite (BFe), Bukoban quartzite (BQu), Nyanazian rhyolite (NyR), and Oyugis granite) are, on average, more substantially reduced than those that occur locally (fenetized Nyanzian [FNy], Homa phonolite [HPh]), Homa limestone [HLi]; Mann-Whitney U, W = `r core_w`, p `r core_p`; Fig. \ref{core_redux_rm}).
+
+  This pattern of core utilization is also reflected in the flake assemblages. Flake sequence values range from the first flakes offremoved from the core to the 30th flake in the sequence. The largest differences are, again, between rock types derived from more distant sources and those found locally (​Fig. 4​; Mann-Whitney U, W = `r fs_w`, p `r fs_p`). Flakes produced on rock types from more distant raw material sources are from later in the reduction sequence, while flakes produced on raw materials that are available locally are from earlier stages of reduction (​Fig. \ref{flake_seq_rm}​). Interestingly, there is a striking amount of homogeneity in the distribution of flake sequence values associated with exotic or distant raw materials. With the exception of BFe, the interquartile range of flake sequence values is very similar from distant sources. Although BFe has a wider range than the other exotic materials, its median is quite similar. The flake sequence values associated with the local materials are also similar to each other but show slightly more variation.
+
+```{r fig-4, fig.height=4, fig.width=4, warning=FALSE, echo=FALSE, fig.cap= "Box plots showing the distribution of flake sequence values present within the Kanjera South flake assemblage. As is the case with the core assemblage, the primary differences in flake sequence values are between materials originating from more distant sources and those that originate from local sources of stone. The central bar is the median value (50th percentile). The lower and upper edges of the box represent the 1st and 3rd quartiles. The length of the upper whisker reflects the maximum value of the data that is not 1.5 times greater than the 75th percentile. The length of the lower whisker is the minimum value of the data not less than 1.5 times the 25th percentile. The dark circles are observations that are either 1.5 times greater than the 75th percentile or 1.5 times less than the 25th percentile. \\label{flake_seq_rm}"}
+
+ggplot(flakes, aes(x = Raw.Material, y = flake.seq, fill = rm.provenance)) + 
+   geom_boxplot()+
+   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Flake sequence")+
+   guides(fill=guide_legend(title="Raw material provenance")) +
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "top")
+
+```
+
+```{r core redux technology comparison}
+
+kruskal.res <- kruskal.test(cores$fixedpredict, cores$DeLaTorre.Typology)
+kr.stat <- round(as.numeric(kruskal.res$statistic),2)
+kruskal_p <- as.numeric(kruskal.res$p.value)
+if(kruskal_p  < .0001){
+  kruskal_p <- "< .0001"
+}
+cores.table <- table(cores$rm.provenance,cores$DeLaTorre.Typology)
+
+fisher.res <- fisher.test(cores.table, simulate.p.value = TRUE)
+
+fisher.p <- round(fisher.res$p.value,4)
+
+```  
+
+As previously reported, the Kanjera core assemblage comprises a wide variety of technological types and core reduction strategies (​Braun et al., 2009a​). The frequency of core reduction strategies present has a significant relationship with the raw material type (Fisher's exact test, p = `r fisher.p`). Although unifacial and unidirectional reduction strategies are present in small frequencies, there is a greater representation of centripetal, bifacial, and multifacial exploitation strategies in materials from more distant origins (​Fig. \ref{core.tech}). On the other hand, local materials such as the FNy and HPh are represented by a greater number of unifacial or unidirectional core reduction strategies (​Fig. \ref{core.tech}​). Contrary to this general pattern, cores produced from some of the local materials (e.g., HLi) are often multifacially reduced. However, as addressed in the discussion, this is likely related to the properties of the raw material itself (Braun et al., 2009). When the core reduction intensity values for each reduction strategy are considered, unifacial and unipolar cores are reduced less than bifacial, multifacial, or polyhedral cores (Kruskal-Wallis, chi-squared = `r kr.stat`, p `r kruskal_p``; ​Fig. \ref{core.tech}​). In other words, core reduction strategies that require fewer core rotations, such as unifacial and unidirectional strategies, are less reduced than those that involved more complex patterns.
+
+```{r fig-5,echo = FALSE, fig.width=6.5, fig.height= 4, fig.cap= "Left: The distribution of core reduction strategies by raw material type. With the exception of Homa limestone, raw materials that derive from the Kisi Highlands are more greatly represented by complex core reduction strategies than those that can be found in the immediate vicinity of Kanjera South. Right: Box plots showing the distribution of reduction intensity values according to reduction strategy. The colors of the boxplots correspond with the representation of different reduction strategies in the left figure. The central bar is the median value (50th percentile). The lower and upper edges of the box represent the 1st and 3rd quartiles. The length of the upper whisker reflects the maximum value of the data that is not 1.5 times greater than the 75th percentile. The length of the lower whisker is the minimum value of the data not less than 1.5 times the 25th percentile. The dark circles are observations that are either 1.5 times greater than the 75th percentile or 1.5 times less than the 25th percentile. FNy = feneitized Nyanzian; HLi = Homa limestone; HPh = Homa phonolite; BBa = Bukoban andesite; BFe = Bukoban felsite; BQu = Bukoban quartzite; NyR = Nyanzian rhyolite; OGr = Oyugis granite, USP = unifacial simple partial; UAU = unidirectional abrupt unifacial; UABI = unifacial abrupt bidirectional; BA = bidirectional abrupt; BAP = bifacial partial; UC = unifacial centripetal; BC = bifacial centripetal; Poly = polyhedral; MFI = mutifacial irregular.  \\label{core.tech}"}
+
+redux.tech<-ggplot(cores, aes(x = DeLaTorre.Typology, y = fixedpredict, fill = DeLaTorre.Typology)) +
+   geom_boxplot() +
+   scale_fill_brewer(type = "div", palette = 6, direction = -1) + 
+      labs(x = "Core reduction strategy", y = "Reduction intensity (% mass lost)")+
+      guides(fill=guide_legend(title="Provenance")) +
+   scale_x_discrete(labels= c("USP", "UAU", "UABI", "BA", "BAP", "UC", "BC","Poly", "MFI"))+
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "none",
+         axis.text.x = element_text(vjust = 1, hjust = 1, angle = 70))
+
+
+rm.tech <- ggplot(cores, aes(x =RM , fill = DeLaTorre.Typology)) +
+   geom_bar(position = "fill") +
+   scale_fill_brewer(type = "div", palette = 6, direction = -1) + 
+   scale_x_discrete(labels = rm_labs)+
+   labs(x = "Raw material", y = "Relative frequency") + 
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "none")
+
+grid.arrange(rm.tech, redux.tech,ncol=2)
+```
+
+## 3.2 Flake efficiency
+
+```{r}
+
+flakes <- subset(flakes, Raw.Material != "OGR")
+e2m.res <- wilcox.test(flakes$PerMass~
+             flakes$rm.provenance)
+
+e2m_stat <- as.numeric(e2m.res$statistic)
+e2m_p <- as.numeric(e2m.res$p.value)
+if(e2m_p < .0001){
+  e2m_p <- "< .0001"
+}
+```
+
+Analysis of the relative proportion of flake edge to mass indicates significantly different technological strategies that were applied to the different raw materials from the Kanjera South assemblage. Although the mean values of raw materials are relatively similar, the overall distribution indicates that rock types from sources that are further away from Kanjera South (e.g., NyR, BFe, BQu) are produced in a way that allows for much higher efficiency values than those seen in the rock types found close to Kanjera South (Mann-Whitney U, W = `r e2m_stat`, p `r e2m_p`). It should be noted that even though there are significant differences between the edge-to-mass ratios, the distributions show overlap (​Fig. \ref{flake_efficiency}​). This indicates that it is physically possible to produce flakes with similar edge-to-mass ratios in each raw material type. Given the results of the core reduction intensity and flake sequence analysis, it could also be argued that the observed differences in flake efficiency could simply reflect the varying levels of reduction intensity observed between the distant and local assemblage. However, ​Figure \ref{flake_efficiency}​ (right) suggests that there is no strong relationship between flake sequence and flake efficiency. This suggests that hominins at Kanjera South did not implement this strategy as frequently on raw materials that were locally abundant. Hominins at Kanjera South consistently produced flakes with greater edge and less mass from rock types that came from more distant sources.
+
+```{r fig-6, echo=FALSE,dpi= 1000,fig.height= 4, fig.width= 6.5, fig.cap= "Violin plots showing the distribution of flake efficiency measures according to raw material. Y axis represents the perimeter of flakes divided by a logarithmically transformed mass value. Right: A scatter plot examining the relationship between flake efficiency and flake sequence. \\label{flake_efficiency}"}
+
+a <-ggplot(data=flakes[flakes$Raw.Material!="OGR",], aes(x=Raw.Material, y= PerMass, fill=rm.provenance))+
+  geom_jitter()+
+  scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+  scale_x_discrete(labels = rm_labs)+
+   theme(legend.position = "top",
+         panel.background = element_rect(color = "black", fill = "white")) +
+   geom_violin()+
+  ylab("Edge to mass ratio mm/log(grams)")+
+  labs(fill = "Provenance")+
+  xlab("Raw Materials")
+
+
+b <- ggplot(flakes[flakes$Raw.Material!="OGR",], aes(x = flake.seq, y = PerMass, color = rm.provenance))+
+   geom_point()+
+   scale_color_manual(values = c("#E69F00", "#56B4E9"))+
+   ylab("Edge to Mass Ratio mm/log(grams)")+
+   xlab("Flake Sequence")+
+   labs(color = "Provenance") + 
+   theme(panel.background = element_rect(color = "black", fill = "white"),
+         legend.position = "top",
+         axis.title.y = element_text(color = "white"),
+         axis.text.y = element_text(color = "white"))
+
+### For Saving Figure
+c<- arrangeGrob(a, b, ncol =2)
+ggsave(filename = "Figures and Tables/Figure 6.png",c ,height = 4, width = 6.5, units = "in")
+
+grid.arrange(a,b, ncol = 2)
+```
+
+4 Discussion
+============
+
+## 4.1 Inferring land use at Kanjera South
+
+It has long been known that Oldowan archaeological sites represent points in a dynamic system where stone is both imported and exported (​Isaac, 1984​; ​Toth, 1985​; ​Potts, 1991​; ​Stout et al., 2005​, ​2010​; ​Semaw, 2006​). However, Oldowan sites that are 2.0 Ma or older are situated close to the raw material source (reviewed in ​Plummer and Finestone, 2018​), whereas Kanjera South is located more distantly from some sources of material. Thus, the combination of local and exotic raw materials at Kanjera South allows for a formal analysis of the stone tool transport process in the early Oldowan.
+
+The results of this study show an interaction between stone tool utilization, raw material type, and core reduction strategies. The most striking distinction is the difference in the degree of utilization of materials from local and exotic sources. This is also reflected in the flake sequence data. To some extent, this can be explained by the poor quality of some of the local materials. As discussed in ​Braun et al. (2009a)​, removal sequences in local feneitized rocks (FNy) tend to be short because of the presence of preexisting internal fracture planes present in the highly metasomatized rocks. The chalky nature and block-like geometry of HLi also limits the number of flakes that can be removed. In contrast, the majority of raw materials from more distant sources possess fewer flaws and fracture more predictably than those found locally (​Braun et al., 2009a​).
+
+However, not all cores from local sources have internal flaws. In particular, HPh does not have the defects common in the other local raw materials but is still less reduced than the nonlocal raw materials. The coarse-grained nature of Oyugis granite makes it difficult to maintain angles of less than 90°, thus limiting the degree that the material could be reduced (​Braun et al., 2009a​). Despite these limitations, Oyugis granite is still more reduced than any of the local raw materials (​Fig. 4​). The totality of these data suggests that raw material properties play a role in reduction intensity but do not explain all the variation in the Kanjera South assemblage.
+
+The differences in the degree of stone utilization at Kanjera South can also be interpreted as the result of the continuous use of the high-quality exotic raw materials as they were moved across long distances. The higher core reduction intensity values and greater flake sequence values in the exotic material are consistent with a distance-decay pattern of tool use that has been documented in a variety of time periods (​Clark, 1979​; ​Newman, 1994​; ​Close, 1999​; ​Blumenschine et al., 2008​; ​Luncz et al., 2016​). Although this pattern has often been associated with a high level of planning and foresight, modeling work has demonstrated that differences in the reduction intensity of materials from local and distant sources can arise simply due to continuous transport even in the absence of a structured land-use pattern (i.e., random movement; ​Brantingham, 2003​; ​Pop, 2016​). However, the Kanjera South assemblage deviates from these neutral models in one critical aspect. These models predict that the variance in tool reduction intensity will also decrease with distance from the raw material source (​Brantingham, 2003​, p. 501). In contrast with model expectations, while exotic materials are reduced more substantially than local materials, the interquartile ranges of flake sequence and core reduction measures of assemblages from distant sources are as wide (or wider) than those associated with local sources.
+
+Therefore, the Kanjera South assemblage does not fit expectations under neutral conditions. It has been hypothesized that such deviations from the neutral model of this nature may arise due to increasingly linear movements toward specific locations (​Brantingham, 2003​, ​2006​; ​Blumenschine et al., 2008​; ​Braun et al., 2008b​). Moreover, subsequent work modeling the influence of directed movement toward attractors has shown that while a distance-decay pattern remains visible, tools from earlier stages of reduction will be over-represented (i.e., greater variance in reduction (​Reeves, 2019​). Thus, the greater than expected range in variance in the reduction intensity of distantly sourced cores may suggest that hominins directed their movement to Kanjera South. This is not to say that hominins carried rocks directly to Kanjera South. However, Kanjera South may have acted as an attractor on the Pleistocene landscape where hominins frequently visited to carry out stone tool-using behaviors. This notion is supported to some extent by the fact that the lithics included in this study were excavated from a 3-m sequence, suggesting that the patterns evinced by this study are the result of the repeated visitation by hominins over hundreds to thousands of years.
+
+This attractiveness of Kanjera South is also supported by other archaeological and paleoecological evidence. Taphonomic studies of the faunal assemblage from Kanjera South have verified that hominins efficiently exploited small bovids and may have processed larger carcasses that were scavenged from carnivores (​Ferraro et al., 2013​; ​Oliver et al., 2019​). Use-wear studies demonstrate that hominins carried out a variety of resource processing activities with stone artifacts at Kanjera South, including butchery and the processing of a variety of plants, including underground storage organs (​Lemorini et al., 2014​, ​2019​). These studies suggest that hominins spent a great deal of time producing stone tools for a variety of tasks. While the notion that hominins directed their movement toward specific localities or ecotones has been suggested at other localities (e.g. ​Blumenschine et al., 2008​, ​2012a​, ​2012b​), Kanjera South represents the earliest documented evidence of this pattern. This reinforces the notion that Oldowan stone tool-use behavior was strongly integrated into broader foraging strategies of Early Pleistocene hominins. It may be that this pattern of behavior, as has been suggested by Potts (1992), is synonymous with the appearance of the Oldowan. This could be tested by future landscape-scale studies at the earliest localities such as Ledi-Geraru and Gona (​Stout et al., 2010​; ​Braun et al., 2019​).
+
+The land-use pattern elucidated at Kanjera South also differs from younger Oldowan sites in scale. The movement pattern described at Koobi Fora (​Braun et al., 2008b​) suggests that hominins directed their movements across paleogeographic settings at a scale of hundreds of meters. At Olduvai Gorge, the directed movement toward riparian woodlands is thought to have occurred over a scale no greater than 5 km (​Blumenschine et al., 2008​, ​2012a​). The data presented here imply that a pattern of directed movement occurred at a scale of at least 10–13 km for nonlocal materials. This is an interesting distinction because Kanjera South is one of the few sites from this time frame situated in an open grassland (​Plummer et al., 2009b​). Modern humans tend to travel farther and more frequently in open arid environments than those who live in more closed habitats (​Kelly, 2007​; ​Burnside et al., 2012​). Savanna-adapted chimpanzees from Fongoli, Senegal, also possess a larger home range and practice fission-fusion less frequently (​Pruetz and Bertolani, 2009​). In this respect, the increased scale of this structured land-use pattern at Kanjera South may further attest to the adaptive flexibility of Oldowan hominin open environments.
+
+## 4.2 The influence of land use on Oldowan production strategies
+
+The results of this study also suggest that patterns of land use influence the technical decisions of Oldowan tool makers. At Kanjera South, exotic raw materials show a strong bias toward more reduced, complete bifacial and multifacial reduction strategies, as opposed to the more even representation of core reduction strategies among local materials. This suggests that the broader pattern of stone tool transport influenced the ways in which Oldowan hominins economized stone. The relatively long transport distance, in combination with the lower quality of material available near Kanjera South, may have incentivized the retention of exotic raw materials in areas where lithologies of such quality were less abundant. In this light, the high frequency of bifacial and multifacial reduction strategies and the higher cutting edge-to-mass ratios present in the exotic raw materials may reflect a general need to maximize the utility that could be extracted from these cores. The exploitation of multiple flake removal surfaces allows a core to remain active in a tool kit for a longer period.
+
+In contrast, the predominantly unifacial and partial bifacial reduction strategies in combination with the significantly lower edge-to-mass ratio values may reflect a more expedient treatment of the lower quality local raw materials. However, it must also be noted that some of the technical variation within the local assemblage likely reflects the constraints imposed by the quality of the raw material. The predominance of irregular multifacial strategies in the HLi is argued to be the result of its chalky nature and block-like geometry (​Braun et al., 2009a​). Therefore, this corpus of information may indicate that Oldowan hominins were able to adopt different technical strategies to mitigate the changing qualities in available raw materials over large transport distances. This pattern of exploitation, in the context of the broader land-use strategy at Kanjera South, provides additional evidence for a high level of planning and foresight in Oldowan hominins.
+
+These results also have broader implications for how techno-economic variation arises in the Oldowan record. The variability in the Oldowan record is often interpreted through a socio-cognitive lens, in which technological differences between assemblages are argued to reflect socially learned information that particularize various groups or individuals (​Delagnes and Roche, 2005​; ​Roche et al., 2009​, ​2018​; ​Stout, 2011​; ​Stout et al., 2019​). More recently, these criteria have been used to argue for the presence of copying social learning mechanisms in the earliest Oldowan (​Stout et al., 2019​). However, the results of this study strongly link the application of various technical strategies with the broader land-use system in which tool use is incorporated. Moreover, the fact that core reduction intensity seems to increase as cores are increasingly rotated further suggests that unifacial, bifacial, and multifacial cores may not reflect discrete strategies but are rather points on continuum of reduction that arise out of a need to maximize the utility of high-quality materials.
+
+The notion that Oldowan stone tool variation may reflect a continuum of utilization has been previously suggested based on evidence from controlled least effort experiments by ​Toth (1982)​ and later by ​Moore and Perston (2016)​. ​Potts (1991)​ suggested that this also may be the case with cores at Olduvai Gorge by showing how different core types varied according to mass. By directly estimating the amount of mass lost from each core in the assemblage, we find further support for this notion as the various core exploitation strategies present at Kanjera South are correlated with reduction intensity. In light of the results of this study, the frequent use of unifacial reduction strategies at sites such as Lokalelei 2C, East Gona, Hadar, Omo, and Ledi-Geraru may relate to the overall abundance of knappable material that is immediately available at these sites (​Kimbel et al., 1996​; ​Roche et al., 1999​; ​Stout et al., 2005​; ​Braun et al., 2019​).
+
+Finally, while the preceding analysis emphasizes the role of the broader environment and land use on technological variability, ecology is not the sole driver of Oldowan technical variation. The interquartile ranges in ​Figure 6​ show a substantial amount of overlap between the reduction intensity and core reduction strategies. This suggests that not all variation can be explained by environmental parameters such as raw material availability and material properties. Moreover, at other localities (e.g. West Turkana), intersite differences are not easily explained by factors such as raw material availability alone (​Roche et al., 2018​). This unexplained variation may be the result of socio-cultural dynamics that may have maintained information regarding the stone tool production process between groups. However, the fidelity and the mechanisms that underlie the maintenance of this information remain an open debate (​Hovers, 2012​; ​Morgan et al., 2015​; ​Tennie et al., 2016​, ​2017​; ​Stout et al., 2019​). Nevertheless, the application of quantitative measures of core reduction intensity, flake sequence, and edge-to-mass ratio, in combination with broader contextual information regarding raw material quality and provenance, further elucidates the relationship between hominin land use and Oldowan technical decision-making.
+
+Conclusion 
+==========
+
+The Oldowan industrial complex reflects a complex interaction of ecological, behavioral, and social factors. The combination of quantitative measures of stone tool reduction with qualitative characterizations of lithic technology (e.g., Braun et al., 2009; ​Plummer and Bishop, 2016​) provides new insights into the ecological factors that influence Oldowan technology and hominin behavior. At Kanjera South, exotic materials are more substantially reduced than local materials, reflecting differences in the quality of the lithologies available. The durability and hardness of exotic materials (​Braun et al., 2009a​) would have incentivized their transport over longer distances (​Braun et al., 2008a​). Differences in reduction intensity highlight that Oldowan tools were part of a mobile tool kit that reflects a broader land-use strategy. The marked differences in reduction intensity in combination with the paucity of early sequence flakes suggest that exotic materials were often used before their arrival at Kanjera South. Although exotic materials are more reduced than local materials, the variance in the amount of stone tool reduction does not adhere to neutral expectations. This result suggests that the lithic assemblage at Kanjera South reflects a structured land-use pattern where hominins may have directed their movement, at least on occasion, to Kanjera South.
+
+This pattern of stone tool transport and use also appears to have influenced the technological strategies used by Oldowan tool makers at Kanjera South. The relationship between core reduction strategies and reduction intensity indicates that raw material quality and provenance have a strong influence on the technological variation observed within a lithic assemblage. While these results show that ecological parameters have a strong effect on stone tool variation, a substantial amount of variation remains unexplained by ecology alone. Future studies would benefit from an integrated approach to understand the behavioral significance of the Oldowan.
+
+Acknowledgments
+===============
+
+The authors thank the National Museums of Kenya and M. Kibunjia, F.K. Manthi, R. Kinyanjui, J. Kibii, and E. Ndiema for support. J.M. Nume and B. Onyango managed the Kanjera field teams. The authors acknowledge Kenya Government permission granted by the Ministry of Sports, Culture and the Arts and by NACOSTI permit P/14/7709/701. Funding from the L.S.B. Leakey Foundation, the National Geographic Society, the National Science Foundation, the Wenner-Gren Foundation, and the Professional Staff Congress–City University of New York Research Award Program to T.W.P. for Kanjera field and laboratory work is gratefully acknowledged. The authors would like to thank Rick Potts and the Human Origins Program at the Smithsonian Institution for support during all phases of the Kanjera research and the Peter Buck Fund for Human Origins Research. The authors report no competing interests.
+
+References
+==========
+
