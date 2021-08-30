@@ -1,4 +1,4 @@
 # Read Me
 
-DISCLAIMER: THIS WORK IS CURRENTLY UNDER REVIEW. PLEASE DO NOT CITE OR PUBLISH THE DATA, CODE, OR OTHER INFORMATION IN THE REPOSITORY WITHOUT THE APPROVED WRITTEN CONSENT OF THE AUTHORS
+This is repository of data and code associated with the paper entitled "Ecological perspectives on technological diversity at Kanjera South". 
 
